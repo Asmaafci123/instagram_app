@@ -18,7 +18,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  bool validate=true;
+  // TextEditingController emailController=TextEditingController();
+  // TextEditingController passwordController=TextEditingController();
+  String email='';
+  String password='';
   @override
   Widget build(BuildContext context) {
 
@@ -61,27 +64,55 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 40, 30,0),
-                              child:CustomTextFormField (
-                                hintText:' Email',
-                                validate: validate,
-                                errorText: 'Email is empty',
-                              ),
+                              child:TextFormField(
+                                cursorColor: Colors.white,
+                                keyboardType:TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    hintText: ' Email',
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                        borderSide: BorderSide(
+                                            color: Colors.white
+                                        )
+                                    )
+                                ),
+                                onChanged: (String value)
+                                {
+                                  email=value;
+                                },
+                              )
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 20, 30,20),
-                              child: CustomTextFormField (
-                                hintText:' password',
-                                validate: validate,
-                                errorText: 'Password is empty',
-                              ),
+                              child:TextFormField(
+                                cursorColor: Colors.white,
+                                keyboardType:TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    hintText: ' password',
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                        borderSide: BorderSide(
+                                            color: Colors.white
+                                        )
+                                    )
+                                ),
+                                onChanged: (String value)
+                                {
+                                  password=value;
+                                },
+                              )
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 0, 30,40),
                               child: CustomButton(
                                   text: 'Log in',
                                   onPressed: LoginCubit.get(context).login(
-                                    LoginCubit.get(context).email,
-                                    LoginCubit.get(context).password,
+                                    email,
+                                    password,
                                       )
                               ),
                             ),
@@ -140,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 buildTextButton('Sign Up',(){
-                                  validate=true;
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

@@ -7,12 +7,9 @@ import 'package:intnstagram/Data_Layer/repositories/auth.dart';
 class LoginCubit extends Cubit<LoginStates>
 {
   LoginCubit() : super(InitialLoginState());
-  final AuthRepository _auth=AuthRepository.instance;
   static LoginCubit get(BuildContext context)=>BlocProvider.of(context);
-  String email='';
-  String password='';
-
   login(String email ,String password,) async {
+    AuthRepository _auth=AuthRepository.instance;
     print(email);
     print(password);
     emit( LoadingLoginState());
