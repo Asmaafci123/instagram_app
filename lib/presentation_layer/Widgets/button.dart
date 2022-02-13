@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intnstagram/size.dart';
 class CustomButton extends StatelessWidget {
-  late final onPressed;
+  late var onPressed;
   late final text;
   CustomButton(
   {
-    this.onPressed,
+    required this.onPressed,
     required this.text
 }
       );
@@ -17,9 +18,9 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10)
       ),
       width: double.infinity,
-      height: 45,
+      height: getHeight(context)*0.06,
       child: GestureDetector(
-        onTap: ()=>onPressed,
+        onTap: onPressed,
         child: Center(
             child: Text(
               text,

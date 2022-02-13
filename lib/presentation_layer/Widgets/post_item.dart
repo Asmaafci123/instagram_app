@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intnstagram/Data_Layer/models/post_model.dart';
 
 class PostItem extends StatelessWidget {
-  final String imageUrl;
   final String userName;
+  final PostModel model;
 
-  const PostItem(this.userName, this.imageUrl);
+  const PostItem(this.model, this.userName);
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-
       child: Column(
         children: <Widget>[
           Padding(
@@ -18,14 +18,14 @@ class PostItem extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/asmaa1.jpg"),
+                  backgroundImage: NetworkImage('${model.profileImg}'),
                   radius: 25,
                 ),
                 SizedBox(
                   width: 16,
                 ),
                 Text(
-                  userName,
+                  '${model.userName}',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -46,7 +46,7 @@ class PostItem extends StatelessWidget {
             width: screenWidth,
             height: screenWidth,
             fit: BoxFit.cover,
-            image: NetworkImage(imageUrl),
+            image: NetworkImage('${model.postImg}'),
           ),
           Padding(
             padding: EdgeInsets.all(16),
@@ -62,7 +62,8 @@ class PostItem extends StatelessWidget {
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Image(
-                          image: AssetImage("assets/icons/like.png"),
+                          image: AssetImage("assets/icons/heart.png"),
+                          fit: BoxFit.cover,
                         ),
                         onPressed: () {},
                       ),
@@ -122,7 +123,7 @@ class PostItem extends StatelessWidget {
                       ),
                       TextSpan(
                           text:
-                          "this is just test for the instagram comment and hi this is just test"),
+                              "this is just test for the instagram comment and hi this is just test"),
                     ],
                   ),
                 ),
@@ -140,10 +141,9 @@ class PostItem extends StatelessWidget {
                   margin: EdgeInsets.only(top: 8),
                   child: Row(
                     children: <Widget>[
-                      Image(
-                        image: AssetImage("assets/images/default_avatar.png"),
-                        width: 35,
-                        height: 35,
+                      CircleAvatar(
+                        backgroundImage: NetworkImage('${model.profileImg}'),
+                        radius: 15,
                       ),
                       Container(
                         margin: EdgeInsetsDirectional.only(start: 8),

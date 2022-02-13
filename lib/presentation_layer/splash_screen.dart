@@ -4,9 +4,11 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intnstagram/size.dart';
 
 import 'login_screen.dart';
 class SplashScreen extends StatelessWidget {
+
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,7 +17,7 @@ class SplashScreen extends StatelessWidget {
       Duration(
         seconds: 3),
           (){
-          Navigator.pushReplacementNamed(context, '/login');
+          Navigator.pushReplacementNamed(context, '/startWidget');
           }
     );
     return Scaffold(
@@ -25,8 +27,8 @@ class SplashScreen extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                width: 100,
-                height: 100,
+                width: getWidth(context)*0.5,
+                height: getHeight(context)*0.1,
                 child: Image(
                   image: AssetImage('assets/logo/instagram.png'),
                 ),
@@ -35,8 +37,8 @@ class SplashScreen extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
                 child: Container(
-                  width: 100,
-                  height: 100,
+                  width: getWidth(context)*0.5,
+                  height: getHeight(context)*0.1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -51,8 +53,8 @@ class SplashScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 30,
-                            height: 30,
+                            width:getWidth(context)*0.08,
+                            height: getHeight(context)*0.05,
                             child: Image(
                               image: AssetImage('assets/logo/meta.jpg'),
                             ),

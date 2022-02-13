@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intnstagram/Business_logic/Auth/signUp_auth/signup_cubit.dart';
 import 'package:intnstagram/Business_logic/Auth/signUp_auth/signup_states.dart';
 import 'package:intnstagram/Data_Layer/repositories/auth.dart';
+import '../size.dart';
 import 'Widgets/button.dart';
 import 'Widgets/divider.dart';
 import 'Widgets/textButton.dart';
@@ -20,31 +21,14 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  bool validate = false;
-  @override
-  void initState() {
-    emailController = TextEditingController()
-      ..addListener(() {
-        setState(() {});
-      });
-    passwordController = TextEditingController()
-      ..addListener(() {
-        setState(() {});
-      });
-    super.initState();
-  }
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
+  String email='';
+  String password='';
+  String phone='';
+  String name='';
+  String userName='';
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return  BlocProvider(
       create: (BuildContext context)=>SignUpCubit(),
       child: BlocConsumer<SignUpCubit, SignUpStates>(
           listener: (context, state) {},
@@ -53,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 body: SafeArea(
                   child: SingleChildScrollView(
                     child: Container(
-                        width: double.infinity,
+                        width: getWidth(context),
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topRight,
@@ -82,65 +66,83 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
                               child: CustomTextFormField(
                                 hintText: ' Email',
-                                validate: validate,
-                                errorText: 'Email is empty',
+                                onChanged:(String value){
+                                  email=value.toString().trim();
+                                },
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                               child: CustomTextFormField(
                                 hintText: ' Full name',
-                                validate: validate,
-                                errorText: 'Name is empty',
+                                onChanged:(String value){
+                                  name=value;
+                                },
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                               child: CustomTextFormField(
                                 hintText: ' Username',
-                                validate: validate,
-                                errorText: 'Username is empty',
+                                onChanged:(String value){
+                                  userName=value;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                              child: CustomTextFormField(
+                                hintText: ' phone',
+                                onChanged:(String value){
+                                  phone=value.toString().trim();
+                                },
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                               child: CustomTextFormField(
                                 hintText: ' password',
-                                validate: validate,
-                                errorText: 'Password is empty',
+                                onChanged:(String value){
+                                  password=value.toString().trim();
+                                },
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
                               child: CustomTextFormField(
                                 hintText: ' Confirm password',
-                                validate: validate,
-                                errorText: 'Password is empty',
+                                onChanged:(String value){},
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(30, 0, 30, 40),
                               child: CustomButton(
                                   text: 'Sign Up',
-                                  onPressed: SignUpCubit.get(context).signUp(
-                                      emailController.text,
-                                      passwordController.text,
-                                      )
+                                  onPressed: (){
+                                    SignUpCubit.get(context).signUp(
+                                      email,
+                                      name,
+                                      userName,
+                                      phone,
+                                      password,
+                                      context
+                                    );
+                                  }
                               ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  height: 20,
-                                  width: 20,
+                                  height: getHeight(context)*0.03,
+                                  width: getWidth(context)*0.05,
                                   child: Image(
                                     image: AssetImage(
                                         'assets/logo/facebook_logo.png'),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 5,
+                                  width: getWidth(context)*0.01,
                                 ),
                                 Text(
                                   'Log in with facebook',
@@ -151,15 +153,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ],
                             ),
                             SizedBox(
-                              height: 10,
+                              height: getHeight(context)*0.015,
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(40, 20, 20, 10),
                               child: Row(
                                 children: [
-                                  buildDivider(),
+                                  buildDivider(context),
                                   SizedBox(
-                                    width: 20,
+                                    width: getWidth(context)*0.035,
                                   ),
                                   Text(
                                     'OR',
@@ -168,9 +170,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 20,
+                                    width: getWidth(context)*0.035,
                                   ),
-                                  buildDivider()
+                                  buildDivider(context)
                                 ],
                               ),
                             ),
@@ -204,5 +206,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
 
     );
+
   }
 }
