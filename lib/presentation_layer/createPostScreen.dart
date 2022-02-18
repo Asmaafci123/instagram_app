@@ -78,7 +78,7 @@ class CreatePostScreen extends StatelessWidget {
                       width: getWidth(context),
                       height: getHeight(context) * 0.5,
                       child: Container(
-                        child: Image.file(File(AppCubit.get(context).image!),fit: BoxFit.fill,),
+                        child: Image.file(File(AppCubit.get(context).postImage!),fit: BoxFit.fill,),
                       ),
                     )
                   ],

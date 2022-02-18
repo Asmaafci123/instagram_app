@@ -128,7 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context)=>AddPostScreen()));
-                              AppCubit.get(context).getAllImagesFromGallery();
                               break;
                           }
                         },

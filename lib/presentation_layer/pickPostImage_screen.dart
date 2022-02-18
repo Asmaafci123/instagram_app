@@ -1,21 +1,41 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intnstagram/Business_logic/App_Cubit/cubit.dart';
 import 'package:intnstagram/Business_logic/App_Cubit/states.dart';
+import 'package:intnstagram/Data_Layer/models/file.dart';
 import 'package:intnstagram/presentation_layer/createPostScreen.dart';
 import 'package:intnstagram/size.dart';
+import 'package:storage_path/storage_path.dart';
 class AddPostScreen extends StatefulWidget {
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-
+  List<FileModel>? files;
+  FileModel? selectedModel;
+  String? image;
   @override
   void initState() {
     super.initState();
+    getAllImagesFromGallery();
+  }
+  void getAllImagesFromGallery()async
+  {
+    var imagePath = await StoragePath.imagesPath;
+    var images = jsonDecode(imagePath) as List;
+    files = images.map<FileModel>((e) => FileModel.fromJson(e)).toList();
+    if (files != null && files!.length > 0)
+    {
+      setState(() {
+        selectedModel = files![0];
+        image = files![0].files![0];
+        AppCubit.get(context).changePostImage(image!);
+      });
+    }
   }
 
   @override
@@ -71,7 +91,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       width: getWidth(context),
                       height: 300,
                       color: Colors.white,
-                        child:Image.file(File(AppCubit.get(context).image!),
+                        child:Image.file(File(image!),
                             height: MediaQuery.of(context).size.height * 0.45,
                             width: MediaQuery.of(context).size.width)
 
@@ -126,18 +146,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         ],
                       ),
                     ),
-                    AppCubit.get(context).selectedModel == null && AppCubit.get(context).selectedModel!.files!.length < 1
+                    selectedModel == null &&selectedModel!.files!.length < 1
                     ? Container()
                     : Container(
                   width: getWidth(context),
-                  height: MediaQuery.of(context).size.height * 0.38,
+                  height: getHeight(context) * 0.38,
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
                           crossAxisSpacing: 3,
                           mainAxisSpacing: 3),
                       itemBuilder: (_, i) {
-                        var file = AppCubit.get(context).selectedModel!.files![i];
+                        var file = selectedModel!.files![i];
                         return GestureDetector(
                           child: Image.file(
                             File(file),
@@ -145,12 +165,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           ),
                           onTap: () {
                             setState(() {
-                              AppCubit.get(context).image = file;
+                              image = file;
                             });
                           },
                         );
                       },
-                      itemCount: AppCubit.get(context).selectedModel!.files!.length),
+                      itemCount: selectedModel!.files!.length),
                 )
                  ],
                 ),

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intnstagram/Business_logic/App_Cubit/states.dart';
 import 'package:flutter/material.dart';
-import 'package:intnstagram/Data_Layer/models/file.dart';
 import 'package:intnstagram/Data_Layer/models/post_model.dart';
 import 'package:intnstagram/Data_Layer/models/user_model.dart';
 import 'package:intnstagram/presentation_layer/profile_screen.dart';
@@ -13,9 +12,9 @@ import 'package:intnstagram/presentation_layer/search_screen.dart';
 import 'package:intnstagram/presentation_layer/shop_screen.dart';
 import 'package:intnstagram/presentation_layer/time_line_screen.dart';
 import 'package:intnstagram/presentation_layer/vedios.dart';
-import 'package:storage_path/storage_path.dart';
 import '../../constants.dart';
 import 'package:firebase_storage/firebase_storage.dart'as firebase_storage;
+import 'package:firebase_database/firebase_database.dart';
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialAppState());
 
@@ -116,20 +115,10 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  List<FileModel>? files;
-  FileModel? selectedModel;
-  String? image;
-  void getAllImagesFromGallery()async
+  String? postImage;
+  void changePostImage(String image)
   {
-    var imagePath = await StoragePath.imagesPath;
-    var images = jsonDecode(imagePath) as List;
-    files = images.map<FileModel>((e) => FileModel.fromJson(e)).toList();
-    if (files != null && files!.length > 0)
-      {
-        selectedModel = files![0];
-        image = files![0].files![0];
-        emit(SuccessGetPostImageState());
-      }
+    postImage=image;
   }
 
   void uploadImagePost({
@@ -142,8 +131,8 @@ class AppCubit extends Cubit<AppStates> {
     FirebaseStorage.
     instance.
     ref().//go to inside firebase_storage
-    child('posts/${Uri.file(File(image!).path).pathSegments.last}').
-    putFile(File(image!)).
+    child('posts/${Uri.file(File(postImage!).path).pathSegments.last}').
+    putFile(File(postImage!)).
     then((value) {
       value.
       ref.
@@ -192,16 +181,19 @@ class AppCubit extends Cubit<AppStates> {
   {
     FirebaseFirestore.
     instance.
-    collection('posts').
-    get().
-    then((value){
-      value.docs.forEach((element) {
-        posts.add(PostModel.fromJson(element.data()));
-      });
-      emit(SuccessGetPostsState());
-    }).
-    catchError((error){
-      emit(FailedGetPostsState(error.toString()));
-    });
+    collection('posts').snapshots().listen((event) {
+      event.docs.forEach((element) {
+      posts.add(PostModel.fromJson(element.data()));
+    });});
+    // then((value){
+    //   value.docs.forEach((element) {
+    //     posts.add(PostModel.fromJson(element.data()));
+    //   });
+    //   emit(SuccessGetPostsState());
+    // }).
+    // catchError((error){
+    //   emit(FailedGetPostsState(error.toString()));
+    // });
   }
+
 }
